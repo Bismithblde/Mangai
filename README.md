@@ -12,14 +12,14 @@ This project contains a working frontend and backend auth flow using:
 
 1. Create a Supabase project.
 2. In Supabase Dashboard, enable Google provider:
-	- Auth -> Providers -> Google
-	- Add your Google OAuth Client ID and Secret
+   - Auth -> Providers -> Google
+   - Add your Google OAuth Client ID and Secret
 3. In Auth -> Providers -> Email, enable email provider and Confirm email.
 4. Add redirect URLs in Supabase Auth settings:
-	- `http://localhost:3000/auth/callback`
-	- `http://localhost:3000/auth/confirm`
+   - `http://localhost:3000/auth/callback`
+   - `http://localhost:3000/auth/confirm`
 5. In Auth -> Email Templates -> Confirm signup, set the link URL to:
-	- `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/`
+   - `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/`
 
 ## 2. Environment Variables
 
