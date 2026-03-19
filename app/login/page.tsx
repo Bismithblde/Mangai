@@ -113,12 +113,15 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#edf1f8] px-4 py-10 sm:px-6">
+    <main className="flex min-h-screen items-center justify-center bg-[#edf1f8] px-4 py-10 sm:px-6 ">
       <section
         ref={cardRef}
         onMouseEnter={() => setIsCardHovered(true)}
         onMouseLeave={handleCardMouseLeave}
-        className={`w-full max-w-[560px] rounded-2xl border border-[#d8e2f1] bg-[#f3f7ff] px-6 py-8 sm:px-10 sm:py-10 transition-transform duration-200 ${isCardHovered ? "scale-100 -translate-y-1" : "scale-90"}`}
+        className={`w-full max-w-[560px] rounded-2xl border border-[#d8e2f1] bg-[#f3f7ff]
+px-6 py-8 sm:px-10 sm:py-10 transform-gpu will-change-transform
+shadow-[0_10px_24px_rgba(24,58,114,0.10)] transition-transform duration-200
+${isCardHovered ? "-translate-y-3" : "translate-y-0"}`}
       >
         <header className="mb-7 text-center">
           <h1 className="text-4xl font-semibold tracking-tight text-[#0f1b2d]">
