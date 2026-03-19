@@ -1,36 +1,15 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function SignupPage() {
-  const cardRef = useRef<HTMLElement | null>(null);
-  const [isCardHovered, setIsCardHovered] = useState(false);
   const [loadingEmailSignUp, setLoadingEmailSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorText, setErrorText] = useState<string | null>(null);
   const [infoText, setInfoText] = useState<string | null>(null);
-
-  const handleCardMouseLeave = (event: React.MouseEvent<HTMLElement>) => {
-    const rect = cardRef.current?.getBoundingClientRect();
-
-    if (!rect) {
-      setIsCardHovered(false);
-      return;
-    }
-
-    const isInsideBounds =
-      event.clientX >= rect.left &&
-      event.clientX <= rect.right &&
-      event.clientY >= rect.top &&
-      event.clientY <= rect.bottom;
-
-    if (!isInsideBounds) {
-      setIsCardHovered(false);
-    }
-  };
 
   const handleEmailSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -64,94 +43,94 @@ export default function SignupPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#edf1f8] px-4 py-10 sm:px-6">
-      <section
-        ref={cardRef}
-        onMouseEnter={() => setIsCardHovered(true)}
-        onMouseLeave={handleCardMouseLeave}
-        className={`w-full max-w-[560px] rounded-2xl border border-[#d8e2f1] bg-[#f3f7ff] px-6 py-8 sm:px-10 sm:py-10 transition-transform duration-200 ${isCardHovered ? "scale-100 -translate-y-1" : "scale-90"}`}
-      >
-        <header className="mb-7 text-center">
-          <h1 className="text-4xl font-semibold tracking-tight text-[#0f1b2d]">
-            Create account
-          </h1>
-          <p className="mt-3 text-xl text-[#5f6f87]">
-            Sign up to start your reading journey
-          </p>
-        </header>
+    <main className="flex min-h-screen items-center justify-center bg-[#f5f7f2] px-4 py-10 sm:px-6">
+      <section className="relative z-10 w-full max-w-[620px] overflow-hidden rounded-3xl border border-[#d7e4d3] bg-[#f9fcf7] shadow-[0_26px_72px_rgba(22,62,39,0.14)]">
+        <div className="bg-[#f9fcf7] px-6 py-8 sm:px-10 sm:py-10">
+          <header className="mb-7">
+            <h1 className="font-mono text-5xl font-semibold tracking-[-0.03em] text-[#183429] text-center">
+              MangAI
+            </h1>
+          </header>
 
-        <form onSubmit={handleEmailSignUp} className="space-y-5">
-          <div className="space-y-2">
-            <label className="text-lg font-medium text-[#13233a]" htmlFor="email">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-              placeholder="you@example.com"
-              className="h-14 w-full rounded-xl border border-[#d0dbeb] bg-[#fbfdff] px-4 text-xl text-[#1b2d48] outline-none transition focus:border-[#98b8ea] hover:bg-[#ffffff]"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-lg font-medium text-[#13233a]" htmlFor="password">
-              Password
-            </label>
-            <div className="flex h-14 items-center rounded-xl border border-[#d0dbeb] bg-[#fbfdff] pr-3">
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-                minLength={6}
-                placeholder="Create a password"
-                className="hover:bg-[#ffffff] h-full w-full rounded-xl bg-transparent px-4 text-xl text-[#1b2d48] outline-none"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((value) => !value)}
-                className="text-sm font-medium text-[#6e819f] transition hover:text-[#586a86]"
+          <form onSubmit={handleEmailSignUp} className="space-y-5">
+            <div className="space-y-2 bg-[#f9fcf7] flex flex-col">
+              <label
+                className="text-sm font-semibold uppercase tracking-[0.1em] text-[#486552]"
+                htmlFor="email"
               >
-                {showPassword ? "Hide" : "Show"}
-              </button>
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                placeholder="you@example.com"
+                className="h-14 w-full rounded-2xl border border-[#cfddca] bg-[#ffffff] px-4 text-lg text-[#1c352a] outline-none transition placeholder:text-[#95a79a] focus:border-[#86c98f] focus:ring-2 focus:ring-[#b6e2b9]/60"
+              />
             </div>
-          </div>
 
-          <button
-            type="submit"
-            disabled={loadingEmailSignUp}
-            className="h-14 w-full rounded-xl bg-[#8fb6f3] text-xl font-semibold text-[#123a72] transition hover:bg-[#80aaf0] disabled:cursor-not-allowed hover:-translate-y-1 disabled:opacity-60"
-          >
-            {loadingEmailSignUp ? "Creating..." : "Create account"}
-          </button>
-        </form>
+            <div className="space-y-2">
+              <label
+                className="text-sm font-semibold uppercase tracking-[0.1em] text-[#486552]"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <div className="flex h-14 items-center rounded-2xl border border-[#cfddca] bg-[#ffffff] pr-3">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                  minLength={6}
+                  placeholder="Create a password"
+                  className="h-full w-full rounded-2xl bg-transparent px-4 text-lg text-[#1c352a] outline-none placeholder:text-[#95a79a]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((value) => !value)}
+                  className="text-sm font-semibold text-[#5a7263] transition hover:text-[#405848]"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
 
-        {errorText && (
-          <p className="mt-5 rounded-lg border border-[#edb6c6] bg-[#fff2f7] px-4 py-3 text-sm text-[#9f3258]">
-            Sign up failed: {errorText}
+            <button
+              type="submit"
+              disabled={loadingEmailSignUp}
+              className="h-14 w-full rounded-full bg-[#a5e37d] text-lg font-semibold text-[#1d3c2f] transition hover:translate-y-[-1px] hover:bg-[#95d770] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loadingEmailSignUp ? "Creating..." : "Create account"}
+            </button>
+          </form>
+
+          {errorText && (
+            <p className="mt-5 rounded-2xl border border-[#ebc2cd] bg-[#fff4f7] px-4 py-3 text-sm text-[#a03e60]">
+              Sign up failed: {errorText}
+            </p>
+          )}
+
+          {infoText && (
+            <p className="mt-5 rounded-2xl border border-[#c7d9ea] bg-[#edf6ff] px-4 py-3 text-sm text-[#335d83]">
+              {infoText}
+            </p>
+          )}
+
+          <p className="mt-8 text-center text-base text-[#607768]">
+            Already have an account?{" "}
+            <button
+              type="button"
+              onClick={() => window.location.assign("/login")}
+              className="font-semibold text-[#3f7f56] transition hover:text-[#2f6943]"
+            >
+              Sign in
+            </button>
           </p>
-        )}
-
-        {infoText && (
-          <p className="mt-5 rounded-lg border border-[#b9cfee] bg-[#ecf4ff] px-4 py-3 text-sm text-[#305e9a]">
-            {infoText}
-          </p>
-        )}
-
-        <p className="mt-8 text-center text-xl text-[#5f6f87]">
-          Already have an account?{" "}
-          <button
-            type="button"
-            onClick={() => window.location.assign("/login")}
-            className="font-semibold text-[#7da6eb] transition hover:text-[#6a95db]"
-          >
-            Sign in
-          </button>
-        </p>
+        </div>
       </section>
     </main>
   );

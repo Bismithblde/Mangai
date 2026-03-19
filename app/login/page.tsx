@@ -1,11 +1,9 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function LoginPage() {
-  const cardRef = useRef<HTMLElement | null>(null);
-  const [isCardHovered, setIsCardHovered] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingGithub, setLoadingGithub] = useState(false);
   const [loadingEmailSignIn, setLoadingEmailSignIn] = useState(false);
@@ -93,174 +91,146 @@ export default function LoginPage() {
   const disableEmailActions =
     loadingEmailSignIn || loadingGoogle || loadingGithub;
 
-  const handleCardMouseLeave = (event: React.MouseEvent<HTMLElement>) => {
-    const rect = cardRef.current?.getBoundingClientRect();
-
-    if (!rect) {
-      setIsCardHovered(false);
-      return;
-    }
-
-    const isInsideBounds =
-      event.clientX >= rect.left &&
-      event.clientX <= rect.right &&
-      event.clientY >= rect.top &&
-      event.clientY <= rect.bottom;
-
-    if (!isInsideBounds) {
-      setIsCardHovered(false);
-    }
-  };
-
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#edf1f8] px-4 py-10 sm:px-6 ">
-      <section
-        ref={cardRef}
-        onMouseEnter={() => setIsCardHovered(true)}
-        onMouseLeave={handleCardMouseLeave}
-        className={`w-full max-w-[560px] rounded-2xl border border-[#d8e2f1] bg-[#f3f7ff]
-px-6 py-8 sm:px-10 sm:py-10 transform-gpu will-change-transform
-shadow-[0_10px_24px_rgba(24,58,114,0.10)] transition-transform duration-200
-${isCardHovered ? "-translate-y-3" : "translate-y-0"}`}
-      >
-        <header className="mb-7 text-center">
-          <h1 className="text-4xl font-semibold tracking-tight text-[#0f1b2d]">
-            Welcome back
-          </h1>
-          <p className="mt-3 text-xl text-[#5f6f87]">
-            Sign in to continue your reading journey
-          </p>
-        </header>
+    <main className="flex min-h-screen items-center justify-center bg-[#f2f5ef] px-4 py-10 sm:px-6">
+      <section className="relative z-10 w-full max-w-[620px] overflow-hidden rounded-3xl border border-[#d6e1d4] bg-[#f8fbf5] shadow-[0_30px_80px_rgba(21,56,35,0.14)]">
+        <div className="bg-[#f8fbf5] px-6 py-8 sm:px-10 sm:py-10">
+          <header className="mb-7">
+            <h1 className="font-mono text-5xl font-semibold tracking-[-0.03em] text-[#183429] text-center">
+              MangAI
+            </h1>
+          </header>
 
-        <form onSubmit={handleEmailSignIn} className="space-y-5">
-          <div className="space-y-2">
-            <label
-              className="text-lg font-medium text-[#13233a]"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-              placeholder="you@example.com"
-              className="h-14 w-full rounded-xl border border-[#d0dbeb] bg-[#fbfdff] px-4 text-xl text-[#1b2d48] outline-none transition focus:border-[#98b8ea] hover:bg-[#ffffff]"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between gap-4">
+          <form onSubmit={handleEmailSignIn} className="space-y-5">
+            <div className="space-y-2 bg-[#f8fbf5] flex flex-col">
               <label
-                className="text-lg font-medium text-[#13233a]"
-                htmlFor="password"
+                className="text-sm font-semibold uppercase tracking-[0.1em] text-[#486552] "
+                htmlFor="email"
               >
-                Password
+                Email
               </label>
-              <button
-                type="button"
-                onClick={() =>
-                  setInfoText(
-                    "Password reset is not configured yet. Please contact support.",
-                  )
-                }
-                className="text-base font-medium text-[#7da6eb] transition hover:text-[#6a95db]"
-              >
-                Forgot password?
-              </button>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                placeholder="you@example.com"
+                className="h-14 w-full rounded-2xl border border-[#cfdccb] bg-[#ffffff] px-4 text-lg text-[#1c352a] outline-none transition placeholder:text-[#93a598] focus:border-[#86c98f] focus:ring-2 focus:ring-[#b6e2b9]/60"
+              />
             </div>
 
-            <div className="flex h-14 items-center rounded-xl border border-[#d0dbeb] bg-[#fbfdff] pr-3">
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-                minLength={6}
-                placeholder="Enter your password"
-                className="hover:bg-[#ffffff] h-full w-full rounded-xl bg-transparent px-4 text-xl text-[#1b2d48] outline-none"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((value) => !value)}
-                className="text-sm font-medium text-[#6e819f] transition hover:text-[#586a86]"
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label
+                  className="text-sm font-semibold uppercase tracking-[0.1em] text-[#486552]"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setInfoText(
+                      "Password reset is not configured yet. Please contact support.",
+                    )
+                  }
+                  className="text-sm font-semibold text-[#3a7d51] transition hover:text-[#2f6943]"
+                >
+                  Forgot password?
+                </button>
+              </div>
+
+              <div className="flex h-14 items-center rounded-2xl border border-[#cfdccb] bg-[#ffffff] pr-3">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                  minLength={6}
+                  placeholder="Enter your password"
+                  className="h-full w-full rounded-2xl bg-transparent px-4 text-lg text-[#1c352a] outline-none placeholder:text-[#93a598]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((value) => !value)}
+                  className="text-sm font-semibold text-[#597062] transition hover:text-[#415548]"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
             </div>
+
+            <label className="flex cursor-pointer items-center gap-3 text-sm text-[#5c7465]">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(event) => setRememberMe(event.target.checked)}
+                className="h-5 w-5 rounded border-[#bfd0bd] text-[#5fa66e]"
+              />
+              <span>Keep me signed in for 30 days</span>
+            </label>
+
+            <button
+              type="submit"
+              disabled={disableEmailActions}
+              className="h-14 w-full rounded-full bg-[#a5e37d] text-lg font-semibold text-[#1d3c2f] transition hover:translate-y-[-1px] hover:bg-[#95d770] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loadingEmailSignIn ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
+
+          <div className="my-8 flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.14em] text-[#7f9284]">
+            <span className="h-px flex-1 bg-[#d8e3d2]" />
+            <span>Or continue with</span>
+            <span className="h-px flex-1 bg-[#d8e3d2]" />
           </div>
 
-          <label className="flex cursor-pointer items-center gap-3 text-lg text-[#5f6f87]">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(event) => setRememberMe(event.target.checked)}
-              className="h-5 w-5 rounded border-[#c3d2e9] text-[#8fb6f3]"
-            />
-            <span>Remember me for 30 days</span>
-          </label>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={handleGoogleSignIn}
+              disabled={disableEmailActions}
+              className="h-12 rounded-full border border-[#cfdccb] bg-[#ffffff] text-sm font-semibold text-[#2f4f3d] transition hover:bg-[#f0f8ed] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loadingGoogle ? "Redirecting..." : "Google"}
+            </button>
 
-          <button
-            type="submit"
-            disabled={disableEmailActions}
-            className="h-14 w-full rounded-xl bg-[#8fb6f3] text-xl font-semibold text-[#123a72] transition hover:bg-[#80aaf0] disabled:cursor-not-allowed hover:-translate-y-1"
-          >
-            {loadingEmailSignIn ? "Signing in..." : "Sign in"}
-          </button>
-        </form>
+            <button
+              type="button"
+              onClick={handleGithubSignIn}
+              disabled={disableEmailActions}
+              className="h-12 rounded-full border border-[#cfdccb] bg-[#ffffff] text-sm font-semibold text-[#2f4f3d] transition hover:bg-[#f0f8ed] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loadingGithub ? "Redirecting..." : "GitHub"}
+            </button>
+          </div>
 
-        <div className="my-8 flex items-center gap-4 text-sm uppercase tracking-[0.08em] text-[#70809a]">
-          <span className="h-px flex-1 bg-[#cfdaeb]" />
-          <span>Or continue with</span>
-          <span className="h-px flex-1 bg-[#cfdaeb]" />
-        </div>
+          {(callbackError || errorText) && (
+            <p className="mt-5 rounded-2xl border border-[#ebc2cd] bg-[#fff4f7] px-4 py-3 text-sm text-[#a03e60]">
+              Login failed: {errorText ?? callbackError}
+            </p>
+          )}
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={handleGoogleSignIn}
-            disabled={disableEmailActions}
-            className="h-14 rounded-xl border border-[#d0dbeb] bg-[#fbfdff] text-lg font-medium text-[#243958] transition hover:bg-[#f2f7ff] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {loadingGoogle ? "Redirecting..." : "Google"}
-          </button>
+          {infoText && (
+            <p className="mt-5 rounded-2xl border border-[#c7d9ea] bg-[#edf6ff] px-4 py-3 text-sm text-[#335d83]">
+              {infoText}
+            </p>
+          )}
 
-          <button
-            type="button"
-            onClick={handleGithubSignIn}
-            disabled={disableEmailActions}
-            className="h-14 rounded-xl border border-[#d0dbeb] bg-[#fbfdff] text-lg font-medium text-[#243958] transition hover:bg-[#f2f7ff] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {loadingGithub ? "Redirecting..." : "GitHub"}
-          </button>
-        </div>
-
-        {(callbackError || errorText) && (
-          <p className="mt-5 rounded-lg border border-[#edb6c6] bg-[#fff2f7] px-4 py-3 text-sm text-[#9f3258]">
-            Login failed: {errorText ?? callbackError}
+          <p className="mt-8 text-center text-base text-[#607768]">
+            Do not have an account?{" "}
+            <button
+              type="button"
+              onClick={() => window.location.assign("/signup")}
+              disabled={disableEmailActions}
+              className="font-semibold text-[#3f7f56] transition hover:text-[#2f6943] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Create one
+            </button>
           </p>
-        )}
-
-        {infoText && (
-          <p className="mt-5 rounded-lg border border-[#b9cfee] bg-[#ecf4ff] px-4 py-3 text-sm text-[#305e9a]">
-            {infoText}
-          </p>
-        )}
-
-        <p className="mt-8 text-center text-xl text-[#5f6f87]">
-          Do not have an account?{" "}
-          <button
-            type="button"
-            onClick={() => window.location.assign("/signup")}
-            disabled={disableEmailActions}
-            className="font-semibold text-[#7da6eb] transition hover:text-[#6a95db] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            Create one
-          </button>
-        </p>
+        </div>
       </section>
     </main>
   );
