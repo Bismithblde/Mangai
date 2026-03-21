@@ -87,89 +87,36 @@ function asString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-function findTitle(record: Record<string, unknown>): string | null {
-  const directKeys = ["title", "name", "series_title"] as const;
-  for (const key of directKeys) {
-    const direct = asString(record[key]);
-    if (direct) {
-      return direct;
-    }
-  }
-
-  const nestedTitles = record.titles;
-  if (Array.isArray(nestedTitles)) {
-    for (const entry of nestedTitles) {
-      if (typeof entry === "string") {
-        const value = asString(entry);
-        if (value) {
-          return value;
-        }
-      }
-
-      if (entry && typeof entry === "object") {
-        const fromObj = asString((entry as Record<string, unknown>).title);
-        if (fromObj) {
-          return fromObj;
-        }
-      }
-    }
-  }
-
-  const wrappedRecord = record.record;
-  if (wrappedRecord && typeof wrappedRecord === "object") {
-    return findTitle(wrappedRecord as Record<string, unknown>);
-  }
-
-  return null;
-}
-
 function normalizeApiResults(payload: unknown): SearchResult[] {
   if (!payload || typeof payload !== "object") {
     return [];
   }
 
   const data = payload as Record<string, unknown>;
-  const candidateArrays = [
-    data.results,
-    data.series,
-    data.items,
-    data.data,
-    data.records,
-  ];
-
-  const list = candidateArrays.find((value) => Array.isArray(value));
-  if (!Array.isArray(list)) {
+  
+  // New unified API returns { data: [...], total, limit, offset }
+  const dataArray = data.data;
+  if (!Array.isArray(dataArray)) {
     return [];
   }
 
   const mapped: SearchResult[] = [];
 
-  for (const item of list) {
+  for (const item of dataArray) {
     if (!item || typeof item !== "object") {
       continue;
     }
 
     const row = item as Record<string, unknown>;
-    const title = findTitle(row);
+    const title = asString(row.title);
     if (!title) {
       continue;
     }
 
-    const id =
-      asString(row.series_id) ??
-      asString(row.id) ??
-      asString((row.record as Record<string, unknown> | undefined)?.series_id) ??
-      `${title}-${mapped.length}`;
-
-    const year =
-      asString(row.year) ??
-      asString((row.record as Record<string, unknown> | undefined)?.year) ??
-      undefined;
-
-    const type =
-      asString(row.type) ??
-      asString((row.record as Record<string, unknown> | undefined)?.type) ??
-      undefined;
+    // New API format: id, title, description, status, year, rating, source
+    const id = asString(row.id) ?? `${title}-${mapped.length}`;
+    const year = typeof row.year === "number" ? String(row.year) : undefined;
+    const type = asString(row.source) ?? undefined;
 
     mapped.push({ id, title, year, type });
   }
@@ -280,19 +227,19 @@ export default function HomeSearch({ userEmail }: HomeSearchProps) {
 
   const fetchSearchResults = async (
     queryText: string,
-    perpage: number,
+    limit: number,
     signal?: AbortSignal,
   ): Promise<SearchResult[]> => {
-    const response = await fetch("/api/mangaupdates/search", {
+    const response = await fetch("/api/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        search: queryText,
-        perpage,
-        page: 1,
-        stype: "title",
+        query: queryText,
+        limit,
+        offset: 0,
+        fallbackToMangaUpdates: true,
       }),
       signal,
     });
